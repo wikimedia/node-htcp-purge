@@ -8,12 +8,16 @@
     "coverage": "istanbul cover _mocha -- -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wikimedia/htcp-purge.git"
+  },
   "keywords": [
     "varnish",
     "cache",
     "mediawiki"
   ],
-  "author": "",
+  "author": "Wikimedia Service Team <services@wikimedia.org>",
   "license": "Apache-2.0",
   "dependencies": {
     "core-js": "^0.9.18",
