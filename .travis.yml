@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+    - "0.10"
+    - "0.12"
+    - "iojs"
+
+before_script:
+  - sleep 5
+
+notifications:
+  email:
+    - services@wikimedia.org
+
+script: npm run-script coverage && (npm run-script coveralls || exit 0)

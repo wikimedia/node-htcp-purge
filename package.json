@@ -1,0 +1,29 @@
+{
+  "name": "htcp-purge",
+  "version": "0.1.0",
+  "description": "Varnish caches purging method",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha -- -R spec",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "keywords": [
+    "varnish",
+    "cache",
+    "mediawiki"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "core-js": "^0.9.18",
+    "jspack": "^0.0.4",
+    "bluebird": "2.8.2"
+  },
+  "devDependencies": {
+    "istanbul": "^0.3.15",
+    "mocha": "^2.2.5",
+    "mocha-jshint": "^2.2.3",
+    "mocha-lcov-reporter": "^0.0.2"
+  }
+}
