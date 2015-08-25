@@ -1,6 +1,6 @@
 # HTCP multicast purge client for Squid and Varnish
 
-The implementation slightly deviates from [the HTCP standard](htcp) 
+The implementation slightly deviates from [the HTCP standard][htcp] 
 to be compatible with Squid and [the Wikimedia Varnish setup][purge]. Purges
 are distributed via UDP multicast.
 
