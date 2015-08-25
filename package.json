@@ -21,7 +21,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "core-js": "^0.9.18",
-    "jspack": "^0.0.4",
     "bluebird": "2.8.2"
   },
   "devDependencies": {

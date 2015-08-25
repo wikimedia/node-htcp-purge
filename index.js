@@ -4,7 +4,6 @@ require('core-js/shim');
 
 var P = require('bluebird');
 var dgram = P.promisifyAll(require('dgram'));
-var jsPack = require('jspack').jspack;
 
 /**
  * Creates a new cache purger instance
@@ -51,13 +50,42 @@ function HTCPPurger(options) {
  */
 HTCPPurger.prototype._constructHTCPRequest = function(url) {
     var self = this;
-    var htcpSpecifier = jsPack.Pack('!H4sH' + url.length + 'sH8sH',
-        [4, 'HEAD', url.length, url, 8, 'HTTP/1.0', 0]);
-    var htcpDataLen = 8 + 2 + htcpSpecifier.length;
+    var urlByteLen = Buffer.byteLength(url);
+    var htcpSpecifierLen = 2 + 4 + 2 + urlByteLen + 2 + 8 + 2;
+    var htcpDataLen = 8 + 2 + htcpSpecifierLen;
     var htcpLen = 4 + htcpDataLen + 2;
-    var result = jsPack.Pack('!HxxHBxLxx' + htcpSpecifier.length + 'AH',
-        [htcpLen, htcpDataLen, 4, self.seqReqId++, htcpSpecifier, 2]);
-    return new Buffer(result);
+
+    var result = new Buffer(htcpLen);
+    // Length
+    result.writeIntBE(htcpLen, 0, 2);
+    // Major-minor version
+    result.writeIntBE(0, 2, 2);
+    // Data length
+    result.writeIntBE(htcpDataLen, 4, 2);
+    // Op code & response
+    result.writeIntBE(4, 6, 1);
+    // Reserved & flags
+    result.writeIntBE(0, 7, 1);
+    // Transaction Id - seq number of a a request
+    result.writeIntBE(self.seqReqId++, 8, 4);
+
+    // HTCP packet contents - CLR specifier
+    // Reserved & reason
+    result.writeIntBE(0, 12, 2);
+    // COUNTSTR method: length + method (HEAD & GET are equivalent)
+    result.writeIntBE(4, 14, 2);
+    result.write('HEAD', 16, 4);
+    // COUNTSTR uri: length + URI
+    result.writeIntBE(urlByteLen, 20, 2);
+    result.write(url, 22, urlByteLen);
+    // COUNTSTR version: length + http version
+    result.writeIntBE(8, 22 + urlByteLen, 2);
+    result.write('HTTP/1.0', 24 + urlByteLen, 8);
+    // COUNTSTR headers: empty, use just as padding
+    result.writeIntBE(0, 32 + urlByteLen, 2);
+    result.writeIntBE(2, 14 + htcpSpecifierLen, 2);
+
+    return result;
 };
 
 /**
