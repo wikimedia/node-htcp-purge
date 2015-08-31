@@ -52,6 +52,7 @@ describe('Protocol tests', function() {
     });
 
     it ('should send datagrams' ,function(done) {
+        this.timeout(5000);
         var purger = new HTCPPurger({
             routes: [
                 {
@@ -67,6 +68,7 @@ describe('Protocol tests', function() {
         });
         server.bind(12345);
         return purger.purge(['test.com'])
+        .delay(100)
         .then(function() {
             server.close();
         });
@@ -77,7 +79,7 @@ describe('Protocol tests', function() {
             routes: [
                 {
                     host: 'localhost',
-                    port: 12345
+                    port: 12346
                 }
             ]
         });
@@ -92,7 +94,7 @@ describe('Protocol tests', function() {
                 done();
             }
         });
-        server.bind(12345);
+        server.bind(12346);
 
         return purger.purge(['test.com'])
         .delay(100)

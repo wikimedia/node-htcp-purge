@@ -57,33 +57,33 @@ HTCPPurger.prototype._constructHTCPRequest = function(url) {
 
     var result = new Buffer(htcpLen);
     // Length
-    result.writeIntBE(htcpLen, 0, 2);
+    result.writeInt16BE(htcpLen, 0);
     // Major-minor version
-    result.writeIntBE(0, 2, 2);
+    result.writeInt16BE(0, 2);
     // Data length
-    result.writeIntBE(htcpDataLen, 4, 2);
+    result.writeInt16BE(htcpDataLen, 4);
     // Op code & response
-    result.writeIntBE(4, 6, 1);
+    result.writeInt8(4, 6);
     // Reserved & flags
-    result.writeIntBE(0, 7, 1);
+    result.writeInt8(0, 7);
     // Transaction Id - seq number of a a request
-    result.writeIntBE(self.seqReqId++, 8, 4);
+    result.writeInt32BE(self.seqReqId++, 8);
 
     // HTCP packet contents - CLR specifier
     // Reserved & reason
-    result.writeIntBE(0, 12, 2);
+    result.writeInt16BE(0, 12);
     // COUNTSTR method: length + method (HEAD & GET are equivalent)
-    result.writeIntBE(4, 14, 2);
+    result.writeInt16BE(4, 14);
     result.write('HEAD', 16, 4);
     // COUNTSTR uri: length + URI
-    result.writeIntBE(urlByteLen, 20, 2);
+    result.writeInt16BE(urlByteLen, 20);
     result.write(url, 22, urlByteLen);
     // COUNTSTR version: length + http version
-    result.writeIntBE(8, 22 + urlByteLen, 2);
+    result.writeInt16BE(8, 22 + urlByteLen);
     result.write('HTTP/1.0', 24 + urlByteLen, 8);
     // COUNTSTR headers: empty, use just as padding
-    result.writeIntBE(0, 32 + urlByteLen, 2);
-    result.writeIntBE(2, 14 + htcpSpecifierLen, 2);
+    result.writeInt16BE(0, 32 + urlByteLen);
+    result.writeInt16BE(2, 14 + htcpSpecifierLen);
 
     return result;
 };
