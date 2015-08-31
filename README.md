@@ -1,4 +1,4 @@
-# HTCP multicast purge client for Squid and Varnish
+# HTCP multicast purge client for Squid and Varnish [![Build Status](https://travis-ci.org/wikimedia/htcp-purge.svg)](https://travis-ci.org/wikimedia/htcp-purge)
 
 The implementation slightly deviates from [the HTCP standard][htcp] 
 to be compatible with Squid and [the Wikimedia Varnish setup][purge]. Purges
