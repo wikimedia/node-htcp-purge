@@ -1,12 +1,12 @@
 "use strict";
 
-var HTCPPurger = require('../index.js');
+const HTCPPurger = require('../index.js');
 
 function validateArgs() {
     if (process.argv.length !== 4) {
         return false;
     }
-    var varnishIP = process.argv[2];
+    const varnishIP = process.argv[2];
     return /(?:\d{1,3}\.){3}\d{1,3}:\d{4}/.test(varnishIP);
 
 }
@@ -15,13 +15,13 @@ if (!validateArgs()) {
     process.exit(1);
 }
 
-var varnishIP = process.argv[2];
-var purgeURL = process.argv[3];
-var hostPortMatch = varnishIP.match(/((?:\d{1,3}\.){3}\d{1,3}):(\d{4})/);
-var varnishHostIp = hostPortMatch[1];
-var varnishPort = parseInt(hostPortMatch[2]);
+const varnishIP = process.argv[2];
+const purgeURL = process.argv[3];
+const hostPortMatch = varnishIP.match(/((?:\d{1,3}\.){3}\d{1,3}):(\d{4})/);
+const varnishHostIp = hostPortMatch[1];
+const varnishPort = parseInt(hostPortMatch[2]);
 
-var purger = new HTCPPurger({
+const purger = new HTCPPurger({
     log: console.log.bind(console),
     routes: [{
             host: varnishHostIp,
@@ -29,6 +29,6 @@ var purger = new HTCPPurger({
         }]
 });
 
-console.log('Sending a datagram to ' + varnishHostIp + ':' + varnishPort + ' for uri ' + purgeURL);
+console.log(`Sending a datagram to ${varnishHostIp}:${varnishPort} for uri ${purgeURL}`);
 purger.purge([purgeURL]);
 
