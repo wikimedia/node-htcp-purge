@@ -67,7 +67,11 @@ class HTCPPurger {
     }
 
     close() {
-        return this.socket.close();
+        try {
+            return this.socket.close();
+        } catch (e) {
+            // We've tried, but seems like socket is already closed, so swallow the error.
+        }
     }
     /**
      * Construct a UDP datagram with HTCP packet for Varnish flush of the url
