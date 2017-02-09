@@ -30,5 +30,5 @@ const purger = new HTCPPurger({
 });
 
 console.log(`Sending a datagram to ${varnishHostIp}:${varnishPort} for uri ${purgeURL}`);
-purger.purge([purgeURL]);
+purger.bind().then(() => purger.purge([purgeURL])).delay(100).then(() => purger.close());
 
