@@ -1,7 +1,5 @@
 "use strict";
 
-require('core-js/shim');
-
 const P = require('bluebird');
 const dgram = P.promisifyAll(require('dgram'));
 
@@ -29,7 +27,7 @@ class HTCPPurger {
         this.options.routes.forEach((routeSpec) => {
             if (routeSpec.rule && /^\/.+\/$/.test(routeSpec.rule)) {
                 const regExp = new RegExp(routeSpec.rule.substring(1, routeSpec.rule.length - 1));
-                routeSpec.rule = (url) => regExp.test(url);
+                routeSpec.rule = url => regExp.test(url);
             } else {
                 routeSpec.rule = () => true;
             }
@@ -51,8 +49,8 @@ class HTCPPurger {
 
     /**
      * Purge a list of resources cahced under provided URLs
-     *
-     * @param urls array of urls to purge
+     * @param {Array} urls array of urls to purge
+     * @return {Promise}
      */
     purge(urls) {
         return P.all(urls.map((url) => {
@@ -75,8 +73,8 @@ class HTCPPurger {
     }
     /**
      * Construct a UDP datagram with HTCP packet for Varnish flush of the url
-     * @param url a url of the resource that should be flushed
-     * @returns {Buffer} resulting HTCP packet bytes
+     * @param {string} url a url of the resource that should be flushed
+     * @return {Buffer} resulting HTCP packet bytes
      * @private
      */
     _constructHTCPRequest(url) {
@@ -121,12 +119,12 @@ class HTCPPurger {
     /**
      * Lookup a cache endpoint for a concrete URL, based on options
      * supplied in constructor
-     * @param url URL to lookup cache endpoint for
-     * @returns {Object} an opbject with host and port keys
+     * @param {string} url URL to lookup cache endpoint for
+     * @return {Object} an opbject with host and port keys
      * @private
      */
     _lookupRoute(url) {
-        const route = this.options.routes.find((route) => route.rule(url));
+        const route = this.options.routes.find(route => route.rule(url));
         if (!route) {
             this.log('error/htcp-purge', {
                 msg: `Could not find route for ${url}`

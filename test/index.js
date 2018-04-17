@@ -68,7 +68,7 @@ describe('Protocol tests', () => {
             done();
         });
         server.bind(12345);
-        return purger
+        purger
         .bind()
         .then(() => purger.purge(['test.com']))
         .delay(100)
@@ -100,7 +100,7 @@ describe('Protocol tests', () => {
         });
         server.bind(12346);
 
-        return purger.bind()
+        purger.bind()
         .then(() => purger.purge(['test.com']))
         .delay(100)
         .then(() => purger.purge(['test.com']))
