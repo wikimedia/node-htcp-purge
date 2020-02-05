@@ -107,4 +107,20 @@ describe( 'Protocol tests', () => {
 				server.close();
 			} );
 	} );
+
+	it( 'should reset seqReqId after max 32-int is reached', () => {
+		const purger = new HTCPPurger( {
+			routes: [
+				{
+					host: 'localhost',
+					port: 999
+				}
+			]
+		} );
+
+		purger.seqReqId = 0xFFFFFFFF + 1;
+		purger._constructHTCPRequest( 'test.com' );
+
+		assert.equal( purger.seqReqId, 1 );
+	} );
 } );

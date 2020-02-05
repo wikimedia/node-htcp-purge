@@ -86,33 +86,33 @@ class HTCPPurger {
 
 		const result = Buffer.alloc( htcpLen );
 		// Length
-		result.writeInt16BE( htcpLen, 0 );
+		result.writeUInt16BE( htcpLen, 0 );
 		// Major-minor version
-		result.writeInt16BE( 0, 2 );
+		result.writeUInt16BE( 0, 2 );
 		// Data length
-		result.writeInt16BE( htcpDataLen, 4 );
+		result.writeUInt16BE( htcpDataLen, 4 );
 		// Op code & response
-		result.writeInt8( 4, 6 );
+		result.writeUInt8( 4, 6 );
 		// Reserved & flags
-		result.writeInt8( 0, 7 );
-		// Transaction Id - seq number of a a request
-		result.writeInt32BE( this.seqReqId++, 8 );
-
+		result.writeUInt8( 0, 7 );
+		// Transaction Id - seq number of a request
+		this.seqReqId &= 0xFFFFFFFF;
+		result.writeUInt32BE( this.seqReqId++, 8 );
 		// HTCP packet contents - CLR specifier
 		// Reserved & reason
-		result.writeInt16BE( 0, 12 );
+		result.writeUInt16BE( 0, 12 );
 		// COUNTSTR method: length + method (HEAD & GET are equivalent)
-		result.writeInt16BE( 4, 14 );
+		result.writeUInt16BE( 4, 14 );
 		result.write( 'HEAD', 16, 4 );
 		// COUNTSTR uri: length + URI
-		result.writeInt16BE( urlByteLen, 20 );
+		result.writeUInt16BE( urlByteLen, 20 );
 		result.write( url, 22, urlByteLen );
 		// COUNTSTR version: length + http version
-		result.writeInt16BE( 8, 22 + urlByteLen );
+		result.writeUInt16BE( 8, 22 + urlByteLen );
 		result.write( 'HTTP/1.0', 24 + urlByteLen, 8 );
 		// COUNTSTR headers: empty, use just as padding
-		result.writeInt16BE( 0, 32 + urlByteLen );
-		result.writeInt16BE( 2, 14 + htcpSpecifierLen );
+		result.writeUInt16BE( 0, 32 + urlByteLen );
+		result.writeUInt16BE( 2, 14 + htcpSpecifierLen );
 
 		return result;
 	}
