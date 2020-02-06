@@ -1,1 +1,4 @@
-extends: 'eslint-config-node-services'
+extends: 'eslint-config-wikimedia/server'
+rules:
+  no-underscore-dangle: off
+  camelcase: off
